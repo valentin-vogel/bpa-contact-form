@@ -1,8 +1,14 @@
 const form = document.getElementById("contactForm");
-const url = "";
+const url = ""; // endpoint url
 const toast = document.getElementById("toast");
 const submit = document.getElementById("submit");
 
+/**
+ * Post request function
+ * @param {string} url 
+ * @param {Object} body 
+ * @param {*} callback 
+ */
 function post(url, body, callback) {
   var req = new XMLHttpRequest();
   req.open("POST", url, true);
@@ -16,6 +22,10 @@ function post(url, body, callback) {
   });
   req.send(JSON.stringify(body));
 }
+
+/**
+ * Success handler
+ */
 function success() {
   toast.innerHTML =
     "Thanks for sending me a message! I'll get in touch with you ASAP. :)";
@@ -27,6 +37,11 @@ function success() {
   form.email.value = "";
   form.content.value = "";
 }
+
+/**
+ * Error handler
+ * @param {Object} err 
+ */
 function error(err) {
   toast.innerHTML =
     "There was an error with sending your message, hold up until I fix it. Thanks for waiting.";
@@ -35,6 +50,9 @@ function error(err) {
   console.log(err);
 }
 
+/**
+ * Main method listen on form submit
+ */
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   toast.innerHTML = "Sending";

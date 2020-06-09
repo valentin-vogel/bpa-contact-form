@@ -3,7 +3,12 @@ const ses = new aws.SES();
 const myEmail = process.env.EMAIL;
 const myDomain = process.env.DOMAIN;
 
-function generateResponse(code, payload) {
+/**
+ * Returns the success response for the client.
+ * @param {number} code 
+ * @param {Object} payload 
+ */
+function generateSuccessResponse(code, payload) {
   return {
     statusCode: code,
     headers: {
@@ -15,7 +20,12 @@ function generateResponse(code, payload) {
   };
 }
 
-function generateError(code, err) {
+/**
+ * Returns the error response for the client.
+ * @param {number} code 
+ * @param {Object} err 
+ */
+function generateErrorResponse(code, err) {
   return {
     statusCode: code,
     headers: {
@@ -27,10 +37,20 @@ function generateError(code, err) {
   };
 }
 
+/**
+ * Returns the parameter object for SES SendMail
+ * @param {Object} body 
+ */
 function generateEmailParams(body) {
-  
+  // @TODO 1: Get form values (email, name and content) from the event body.
+  // @TODO 2: Create the parameter object for AWS-SES SendMail method.
+  return {}
 }
 
+/**
+ * Main method of AWS-Lambda function
+ * @return JSON (success or error)
+ */ 
 module.exports.send = async (event) => {
-  
+  // @TODO 3: Try sending an email with AWS-SES, return success response and catch possible errors.
 };
