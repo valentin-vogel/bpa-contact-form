@@ -1,0 +1,13 @@
+{
+  "name": "contact-form",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "deploy": "sls deploy && sls client deploy",
+    "remove": "sls remove && sls client remove"
+  },
+  "author": "Valentin Vogel",
+  "dependencies": {
+    "serverless-finch": "^2.5.2"
+  }
+}

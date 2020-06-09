@@ -1,0 +1,33 @@
+service: bpa-contact-form-${self:custom.secrets.SNumber}
+
+plugins:
+  - serverless-finch
+
+custom:
+  secrets: ${file(secrets.json)}
+  client:
+    bucketName: bpa-contact-form-${self:custom.secrets.SNumber}-${self:custom.secrets.NODE_ENV}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${self:custom.secrets.NODE_ENV}
+  region: eu-central-1
+  environment: 
+    NODE_ENV: ${self:custom.secrets.NODE_ENV}
+    EMAIL: ${self:custom.secrets.EMAIL}
+    DOMAIN: ${self:custom.secrets.DOMAIN}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "ses:SendEmail"
+      Resource: "*"
+
+functions:
+  send:
+    handler: handler.send
+    events:
+      - http:
+          path: send
+          method: post
+          cors: true
