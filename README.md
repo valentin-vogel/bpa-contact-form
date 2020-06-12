@@ -20,7 +20,7 @@ cd bpa-contact-form
 npm install
 ```
 
-Open `secrets.json` and set **Email** and **SNumber**. If you are a lecturer or professor please use your lastname (small letters) for **SNumber**. 
+Open `secrets.json` and set **Email** and **SNumber**. If you are a lecturer or professor please use your "firstnamelastname" (small letters) for **SNumber**.
 
 Deploy / remove application:
 
