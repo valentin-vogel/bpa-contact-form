@@ -5,8 +5,9 @@ const myDomain = process.env.DOMAIN;
 
 /**
  * Returns the success response for the client.
- * @param {number} code 
- * @param {Object} payload 
+ * @param {number} code
+ * @param {Object} payload
+ * @returns {Object}
  */
 function generateSuccessResponse(code, payload) {
   return {
@@ -22,8 +23,9 @@ function generateSuccessResponse(code, payload) {
 
 /**
  * Returns the error response for the client.
- * @param {number} code 
- * @param {Object} err 
+ * @param {number} code
+ * @param {Object} err
+ * @returns {Object}
  */
 function generateErrorResponse(code, err) {
   return {
@@ -38,19 +40,47 @@ function generateErrorResponse(code, err) {
 }
 
 /**
- * Returns the parameter object for SES SendMail
- * @param {Object} body 
+ * Returns the parameter object for SES SendMail.
+ * @param {Object} body
+ * @returns {Object}
  */
 function generateEmailParams(body) {
-  // @TODO 1: Get form values (email, name and content) from the event body.
-  // @TODO 2: Create the parameter object for AWS-SES SendMail method.
-  return {}
+  const { email, name, content } = JSON.parse(body);
+  if (!(email && name && content)) {
+    throw new Error(
+      "Missing parameters! Make sure to add parameters 'email', 'name', 'content'."
+    );
+  }
+
+  return {
+    Source: myEmail,
+    Destination: { ToAddresses: [myEmail] },
+    ReplyToAddresses: [email],
+    Message: {
+      Body: {
+        Text: {
+          Charset: "UTF-8",
+          Data: `Message sent from email ${email} by ${name} \nContent: ${content}`,
+        },
+      },
+      Subject: {
+        Charset: "UTF-8",
+        Data: `You received a message from ${myDomain}!`,
+      },
+    },
+  };
 }
 
 /**
  * Main method of AWS-Lambda function
- * @return JSON (success or error)
- */ 
+ * @returns {Object} (success or error)
+ */
 module.exports.send = async (event) => {
-  // @TODO 3: Try sending an email with AWS-SES, return success response and catch possible errors.
+  try {
+    const emailParams = generateEmailParams(event.body);
+    const data = await ses.sendEmail(emailParams).promise();
+    return generateSuccessResponse(200, data);
+  } catch (err) {
+    return generateErrorResponse(500, err);
+  }
 };
